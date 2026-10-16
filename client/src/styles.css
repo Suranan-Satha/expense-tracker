@@ -1,62 +1,47 @@
-:root {
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --primary: #4f46e5;
-  --danger: #dc2626;
-  --border: #e5e7eb;
+/* Windows XP Luna Theme */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
 }
-
-* { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  font-family: 'Noto Sans Thai', 'Segoe UI', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background-color: #3a6ea5; /* สีพื้นหลัง Windows XP Classic Blue */
+  color: #000;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px 10px;
 }
 
-h1 { font-size: 1.4rem; margin: 0; }
-h2 { font-size: 1.1rem; margin: 0 0 12px; }
-
-.container { max-width: 900px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-.topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-.row { display: flex; gap: 8px; align-items: center; }
-
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-
-label { display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; font-weight: 500; }
-input, select { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; }
-input:focus, select:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
-
-.error { color: var(--danger); font-size: 0.8rem; font-weight: 400; }
-.muted { color: var(--muted); font-weight: 400; font-size: 0.85rem; }
-.alert { background: #fef2f2; border: 1px solid #fecaca; color: var(--danger); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; }
-
-.btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; font: inherit; }
-.btn:hover { background: #f3f4f6; }
-.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn.primary:hover { background: #4338ca; }
-.btn.danger { color: var(--danger); border-color: #fecaca; }
-.btn.small { padding: 4px 10px; font-size: 0.85rem; }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.link { background: none; border: 0; color: var(--primary); cursor: pointer; font: inherit; padding: 0; }
-
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
-.stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; }
-.stat strong { font-size: 1.15rem; }
-
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.92rem; }
-th.num, td.num { text-align: right; }
-.actions { white-space: nowrap; text-align: right; }
-.tag { background: #eef2ff; color: var(--primary); padding: 2px 8px; border-radius: 999px; font-size: 0.8rem; }
-
-.auth-wrap { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
-.auth-card { width: 100%; max-width: 380px; }
-
-@media (max-width: 600px) {
-  th:nth-child(3), td:nth-child(3) { display: none; }
+/* Container & Window Panels */
+.container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
+
+.auth-card,
+.card {
+  background: #ece9d8; /* สีพื้นหลังหน้าต่าง Windows XP */
+  border: 2px solid #0055ea;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+  padding: 0 0 16px 0;
+  overflow: hidden;
+}
+
+/* Header & Titlebar Style */
+.auth-header,
+.header,
+.card-title {
+  background: linear-gradient(to right, #0058ee 0%, #3a93ff 10%, #0058ee 90%, #003c74 100%);
+  color: #ffffff;
+  font-weight: bold;
+  padding: 6px 12px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between
