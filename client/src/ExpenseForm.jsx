@@ -55,11 +55,11 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
   }
 
   return (
-      <div className="card">
-        <div className="card-header">
-          <h2>{editing ? 'แก้ไขรายการ' : 'เพิ่มรายการรายจ่าย'}</h2>
+      <form className="card" onSubmit={submit} noValidate>
+        <div className="card-title">
+          <h2>{editing ? 'แก้ไขรายการ' : 'เพิ่มรายจ่าย'}</h2>
         </div>
-        <form onSubmit={submit} className="card-body" noValidate>
+        <div className="card-body">
           <div className="form-grid">
             <div className="form-group">
               <label htmlFor="amount">จำนวนเงิน (บาท)</label>
@@ -67,23 +67,16 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
                   id="amount"
                   type="number"
                   step="0.01"
-                  placeholder="0.00"
                   value={form.amount}
                   onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                  className={errors.amount ? 'input-error' : ''}
               />
               {errors.amount && <span className="field-error">{errors.amount}</span>}
             </div>
 
             <div className="form-group">
               <label htmlFor="category">หมวดหมู่</label>
-              <select
-                  id="category"
-                  value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className={errors.category ? 'input-error' : ''}
-              >
-                <option value="">-- เลือกหมวดหมู่ --</option>
+              <select id="category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                <option value="">-- เลือก --</option>
                 {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </select>
               {errors.category && <span className="field-error">{errors.category}</span>}
@@ -97,41 +90,33 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
                   max={today()}
                   value={form.date}
                   onChange={(e) => setForm({ ...form, date: e.target.value })}
-                  className={errors.date ? 'input-error' : ''}
               />
               {errors.date && <span className="field-error">{errors.date}</span>}
             </div>
           </div>
 
           <div className="form-group">
-            <div className="label-row">
-              <label htmlFor="note">หมายเหตุ</label>
-              <span className="char-count">{form.note.length}/{NOTE_MAX}</span>
-            </div>
+            <label htmlFor="note">
+              หมายเหตุ <span className="muted">({form.note.length}/{NOTE_MAX})</span>
+            </label>
             <input
                 id="note"
-                type="text"
                 value={form.note}
                 onChange={(e) => setForm({ ...form, note: e.target.value })}
-                placeholder="เช่น ค่าอาหารกลางวัน, ค่าเดินทาง"
-                className={errors.note ? 'input-error' : ''}
+                placeholder="เช่น ค่าอาหาร, ค่ารถไฟฟ้า"
             />
             {errors.note && <span className="field-error">{errors.note}</span>}
           </div>
 
-          {message && <div className="alert alert-error">{message}</div>}
+          {message && <div className="alert" style={{ margin: '10px 0 0 0' }}>{message}</div>}
 
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary" disabled={saving}>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+            <button type="submit" className="btn" disabled={saving}>
               {saving ? 'กำลังบันทึก...' : editing ? 'บันทึกการแก้ไข' : 'เพิ่มรายการ'}
             </button>
-            {editing && (
-                <button type="button" className="btn btn-secondary" onClick={onCancel}>
-                  ยกเลิก
-                </button>
-            )}
+            {editing && <button type="button" className="btn" onClick={onCancel}>ยกเลิก</button>}
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
   );
 }

@@ -36,56 +36,49 @@ export default function AuthPage({ onLoginSuccess }) {
         <div className="auth-card">
           <div className="auth-header">
             <h1>Daily Expense Tracker</h1>
-            <p>{isRegister ? 'สร้างบัญชีผู้ใช้ใหม่' : 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ'}</p>
           </div>
+          <div className="auth-body">
+            <p className="muted" style={{ marginBottom: '14px', fontSize: '13px' }}>
+              {isRegister ? 'สร้างบัญชีผู้ใช้ใหม่' : 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ'}
+            </p>
 
-          {error && <div className="alert alert-error">{error}</div>}
+            {error && <div className="alert" style={{ margin: '0 0 14px 0' }}>{error}</div>}
 
-          <form onSubmit={handleSubmit} className="auth-form" noValidate>
-            <div className="form-group">
-              <label htmlFor="username">ชื่อผู้ใช้</label>
-              <input
-                  id="username"
-                  type="text"
-                  value={form.username}
-                  onChange={(e) => setForm({ ...form, username: e.target.value })}
-                  placeholder="กรอกชื่อผู้ใช้"
-                  autoFocus
-              />
-            </div>
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="form-group">
+                <label htmlFor="username">ชื่อผู้ใช้</label>
+                <input
+                    id="username"
+                    type="text"
+                    value={form.username}
+                    onChange={(e) => setForm({ ...form, username: e.target.value })}
+                    autoFocus
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="password">รหัสผ่าน</label>
-              <input
-                  id="password"
-                  type="password"
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  placeholder="กรอกรหัสผ่าน"
-              />
-            </div>
+              <div className="form-group">
+                <label htmlFor="password">รหัสผ่าน</label>
+                <input
+                    id="password"
+                    type="password"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                />
+              </div>
 
-            <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-              {loading ? 'กำลังดำเนินการ...' : isRegister ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ'}
-            </button>
-          </form>
-
-          <div className="auth-footer">
-            {isRegister ? (
-                <p>
-                  มีบัญชีอยู่แล้ว?{' '}
-                  <button type="button" className="btn-link" onClick={() => { setIsRegister(false); setError(''); }}>
-                    เข้าสู่ระบบ
-                  </button>
-                </p>
-            ) : (
-                <p>
-                  ยังไม่มีบัญชี?{' '}
-                  <button type="button" className="btn-link" onClick={() => { setIsRegister(true); setError(''); }}>
-                    สมัครสมาชิก
-                  </button>
-                </p>
-            )}
+              <div className="login-actions">
+                <button type="submit" className="btn btn-block" disabled={loading}>
+                  {loading ? 'กำลังดำเนินการ...' : isRegister ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ'}
+                </button>
+                <button
+                    type="button"
+                    className="login-toggle-btn"
+                    onClick={() => { setIsRegister(!isRegister); setError(''); }}
+                >
+                  {isRegister ? 'มีบัญชีอยู่แล้ว? เข้าสู่ระบบ' : 'ยังไม่มีบัญชี? สมัครสมาชิก'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
