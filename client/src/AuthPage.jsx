@@ -10,11 +10,15 @@ export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+
     if (!form.username.trim() || !form.password) {
       setError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
       return;
     }
+
     setLoading(true);
+    let userData = null;
+
     try {
       let res;
       if (isRegister) {
@@ -23,18 +27,21 @@ export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
         res = await api.login(form.username, form.password);
       }
       setSession(res.token, res.user);
-
-      // ตรวจสอบและเรียกฟังก์ชันเข้าสู่ระบบตามที่ App.jsx ส่งมา
-      const handleLogin = onLoginSuccess || onLogin || setUser;
-      if (typeof handleLogin === 'function') {
-        handleLogin(res.user);
-      } else {
-        window.location.reload();
-      }
+      userData = res.user;
     } catch (err) {
       setError(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-    } finally {
       setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+
+    // ย้ายการเปลี่ยนหน้าออกมาด้านนอก try/catch
+    const handleLogin = onLoginSuccess || onLogin || setUser;
+    if (typeof handleLogin === 'function') {
+      handleLogin(userData);
+    } else {
+      window.location.reload();
     }
   }
 

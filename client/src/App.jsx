@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { getToken, getUser, setSession, clearSession } from './api.js';
 import AuthPage from './AuthPage.jsx';
 import ExpensePage from './ExpensePage.jsx';
+import { clearSession, getUser } from './api.js';
 
 export default function App() {
-  const [user, setUser] = useState(getToken() ? getUser() : null);
+  const [user, setUser] = useState(getUser());
 
-  function handleLogin(token, u) {
-    setSession(token, u);
-    setUser(u);
-  }
   function handleLogout() {
     clearSession();
     setUser(null);
   }
 
-  return user ? <ExpensePage user={user} onLogout={handleLogout} /> : <AuthPage onLogin={handleLogin} />;
+  if (!user) {
+    return (
+        <AuthPage
+            onLoginSuccess={(u) => setUser(u)}
+            onLogin={(u) => setUser(u)}
+            setUser={setUser}
+        />
+    );
+  }
+
+  return <ExpensePage user={user} onLogout={handleLogout} />;
 }
