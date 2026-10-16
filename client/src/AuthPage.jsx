@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { api, setSession } from './api.js';
 
-export default function AuthPage({ onLoginSuccess }) {
+export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
   const [isRegister, setIsRegister] = useState(false);
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
@@ -23,7 +23,14 @@ export default function AuthPage({ onLoginSuccess }) {
         res = await api.login(form.username, form.password);
       }
       setSession(res.token, res.user);
-      onLoginSuccess(res.user);
+
+      // ตรวจสอบและเรียกฟังก์ชันเข้าสู่ระบบตามที่ App.jsx ส่งมา
+      const handleLogin = onLoginSuccess || onLogin || setUser;
+      if (typeof handleLogin === 'function') {
+        handleLogin(res.user);
+      } else {
+        window.location.reload();
+      }
     } catch (err) {
       setError(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
     } finally {
