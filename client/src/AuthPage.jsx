@@ -39,7 +39,7 @@ export default function AuthPage({ onLogin }) {
   return (
     <div className="auth-wrap">
       <form className="card auth-card" onSubmit={submit} noValidate>
-        <h1>💸 Daily Expense Tracker</h1>
+        <h2 className="auth-header">Daily Expense Tracker</h2>
         <p className="muted">{mode === 'login' ? 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ' : 'สร้างบัญชีใหม่'}</p>
 
         <label>

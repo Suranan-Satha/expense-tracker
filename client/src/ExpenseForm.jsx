@@ -11,7 +11,6 @@ function today() {
 
 const emptyForm = () => ({ amount: '', category: '', date: today(), note: '' });
 
-// ฟอร์มใช้ทั้งเพิ่ม (editing = null) และแก้ไข (editing = รายการที่เลือก)
 export default function ExpenseForm({ editing, onSubmit, onCancel }) {
   const [form, setForm] = useState(emptyForm());
   const [errors, setErrors] = useState({});
@@ -24,7 +23,6 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
     setForm(editing ? { amount: String(editing.amount), category: editing.category, date: editing.date, note: editing.note } : emptyForm());
   }, [editing]);
 
-  // Client-side validation — กฎเดียวกับฝั่งเซิร์ฟเวอร์
   function validate() {
     const e = {};
     const amount = Number(form.amount);
@@ -49,7 +47,7 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
       await onSubmit({ ...form, amount: Number(form.amount) });
       if (!editing) setForm(emptyForm());
     } catch (err) {
-      setErrors(err.fields || {}); // แสดง error จากเซิร์ฟเวอร์ใต้ช่องที่เกี่ยวข้อง
+      setErrors(err.fields || {});
       setMessage(err.message);
     } finally {
       setSaving(false);
@@ -57,54 +55,54 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
   }
 
   return (
-    <form className="card" onSubmit={submit} noValidate>
-      <h2>{editing ? '✏️ แก้ไขรายการ' : '➕ เพิ่มรายจ่าย'}</h2>
+      <form className="card" onSubmit={submit} noValidate>
+        <h2>{editing ? 'แก้ไขรายการ' : 'เพิ่มรายจ่าย'}</h2>
 
-      <div className="grid">
+        <div className="grid">
+          <label>
+            จำนวนเงิน (บาท)
+            <input
+                type="number"
+                step="0.01"
+                value={form.amount}
+                onChange={(e) => setForm({ ...form, amount: e.target.value })}
+            />
+            {errors.amount && <span className="error">{errors.amount}</span>}
+          </label>
+
+          <label>
+            หมวดหมู่
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+              <option value="">-- เลือก --</option>
+              {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+            {errors.category && <span className="error">{errors.category}</span>}
+          </label>
+
+          <label>
+            วันที่
+            <input
+                type="date"
+                max={today()}
+                value={form.date}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+            />
+            {errors.date && <span className="error">{errors.date}</span>}
+          </label>
+        </div>
+
         <label>
-          จำนวนเงิน (บาท)
-          <input
-            type="number"
-            step="0.01"
-            value={form.amount}
-            onChange={(e) => setForm({ ...form, amount: e.target.value })}
-          />
-          {errors.amount && <span className="error">{errors.amount}</span>}
+          หมายเหตุ <span className="muted">({form.note.length}/{NOTE_MAX})</span>
+          <input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} placeholder="เช่น กาแฟ, ค่ารถไฟฟ้า" />
+          {errors.note && <span className="error">{errors.note}</span>}
         </label>
 
-        <label>
-          หมวดหมู่
-          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-            <option value="">-- เลือก --</option>
-            {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-          </select>
-          {errors.category && <span className="error">{errors.category}</span>}
-        </label>
+        {message && <div className="alert">{message}</div>}
 
-        <label>
-          วันที่
-          <input
-            type="date"
-            max={today()}
-            value={form.date}
-            onChange={(e) => setForm({ ...form, date: e.target.value })}
-          />
-          {errors.date && <span className="error">{errors.date}</span>}
-        </label>
-      </div>
-
-      <label>
-        หมายเหตุ <span className="muted">({form.note.length}/{NOTE_MAX})</span>
-        <input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} placeholder="เช่น กาแฟ, ค่ารถไฟฟ้า" />
-        {errors.note && <span className="error">{errors.note}</span>}
-      </label>
-
-      {message && <div className="alert">{message}</div>}
-
-      <div className="row">
-        <button className="btn primary" disabled={saving}>{saving ? 'กำลังบันทึก...' : editing ? 'บันทึกการแก้ไข' : 'เพิ่มรายการ'}</button>
-        {editing && <button type="button" className="btn" onClick={onCancel}>ยกเลิก</button>}
-      </div>
-    </form>
+        <div className="row" style={{ marginTop: '12px' }}>
+          <button className="btn primary" disabled={saving}>{saving ? 'กำลังบันทึก...' : editing ? 'บันทึกการแก้ไข' : 'เพิ่มรายการ'}</button>
+          {editing && <button type="button" className="btn" onClick={onCancel}>ยกเลิก</button>}
+        </div>
+      </form>
   );
 }
