@@ -1,82 +1,93 @@
 import React, { useState } from 'react';
-import { api } from './api.js';
+import { api, setSession } from './api.js';
 
-export default function AuthPage({ onLogin }) {
-  const [mode, setMode] = useState('login'); // 'login' | 'register'
+export default function AuthPage({ onLoginSuccess }) {
+  const [isRegister, setIsRegister] = useState(false);
   const [form, setForm] = useState({ username: '', password: '' });
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Client-side validation (เซิร์ฟเวอร์ตรวจซ้ำอีกครั้งเสมอ)
-  function validate() {
-    const e = {};
-    if (!/^[A-Za-z0-9_]{3,30}$/.test(form.username)) e.username = 'a-z, 0-9 หรือ _ ยาว 3-30 ตัวอักษร';
-    if (form.password.length < 6) e.password = 'รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร';
-    return e;
-  }
-
-  async function submit(ev) {
-    ev.preventDefault();
-    setMessage('');
-    const e = mode === 'register' ? validate() : {};
-    setErrors(e);
-    if (Object.keys(e).length) return;
-
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    if (!form.username.trim() || !form.password) {
+      setError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+      return;
+    }
     setLoading(true);
     try {
-      const fn = mode === 'login' ? api.login : api.register;
-      const { token, user } = await fn(form.username.trim(), form.password);
-      onLogin(token, user);
+      let res;
+      if (isRegister) {
+        res = await api.register(form.username, form.password);
+      } else {
+        res = await api.login(form.username, form.password);
+      }
+      setSession(res.token, res.user);
+      onLoginSuccess(res.user);
     } catch (err) {
-      setErrors(err.fields || {});
-      setMessage(err.message);
+      setError(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="auth-wrap">
-      <form className="card auth-card" onSubmit={submit} noValidate>
-        <h2 className="auth-header">Daily Expense Tracker</h2>
-        <p className="muted">{mode === 'login' ? 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ' : 'สร้างบัญชีใหม่'}</p>
+      <div className="auth-wrapper">
+        <div className="auth-card">
+          <div className="auth-header">
+            <h1>Daily Expense Tracker</h1>
+            <p>{isRegister ? 'สร้างบัญชีผู้ใช้ใหม่' : 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ'}</p>
+          </div>
 
-        <label>
-          ชื่อผู้ใช้
-          <input
-            value={form.username}
-            onChange={(e) => setForm({ ...form, username: e.target.value })}
-            autoComplete="username"
-          />
-          {errors.username && <span className="error">{errors.username}</span>}
-        </label>
+          {error && <div className="alert alert-error">{error}</div>}
 
-        <label>
-          รหัสผ่าน
-          <input
-            type="password"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-          />
-          {errors.password && <span className="error">{errors.password}</span>}
-        </label>
+          <form onSubmit={handleSubmit} className="auth-form" noValidate>
+            <div className="form-group">
+              <label htmlFor="username">ชื่อผู้ใช้</label>
+              <input
+                  id="username"
+                  type="text"
+                  value={form.username}
+                  onChange={(e) => setForm({ ...form, username: e.target.value })}
+                  placeholder="กรอกชื่อผู้ใช้"
+                  autoFocus
+              />
+            </div>
 
-        {message && <div className="alert">{message}</div>}
+            <div className="form-group">
+              <label htmlFor="password">รหัสผ่าน</label>
+              <input
+                  id="password"
+                  type="password"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  placeholder="กรอกรหัสผ่าน"
+              />
+            </div>
 
-        <button className="btn primary" disabled={loading}>
-          {loading ? 'กำลังดำเนินการ...' : mode === 'login' ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก'}
-        </button>
+            <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+              {loading ? 'กำลังดำเนินการ...' : isRegister ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ'}
+            </button>
+          </form>
 
-        <button
-          type="button"
-          className="link"
-          onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setErrors({}); setMessage(''); }}
-        >
-          {mode === 'login' ? 'ยังไม่มีบัญชี? สมัครสมาชิก' : 'มีบัญชีแล้ว? เข้าสู่ระบบ'}
-        </button>
-      </form>
-    </div>
+          <div className="auth-footer">
+            {isRegister ? (
+                <p>
+                  มีบัญชีอยู่แล้ว?{' '}
+                  <button type="button" className="btn-link" onClick={() => { setIsRegister(false); setError(''); }}>
+                    เข้าสู่ระบบ
+                  </button>
+                </p>
+            ) : (
+                <p>
+                  ยังไม่มีบัญชี?{' '}
+                  <button type="button" className="btn-link" onClick={() => { setIsRegister(true); setError(''); }}>
+                    สมัครสมาชิก
+                  </button>
+                </p>
+            )}
+          </div>
+        </div>
+      </div>
   );
 }
