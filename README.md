@@ -1,76 +1,121 @@
-# 💸 Daily Expense Tracker
+# 🖥️ Daily Expense Tracker (Windows XP Theme)
 
-ระบบบันทึกรายจ่ายประจำวัน — Express + SQLite (backend) และ React + Vite (frontend)
+แอปพลิเคชันบันทึกรายจ่ายประจำวันยุคดิจิทัลในธีมย้อนยุค **Windows XP Luna Theme** พัฒนาขึ้นในรูปแบบ Full-Stack Web Application ที่เน้นความเรียบง่าย ประสิทธิภาพสูง และความแม่นยำในการจัดการข้อมูลการเงินส่วนบุคคล
 
-## ตอบโจทย์ทั้ง 5 ข้อ
+![Windows XP Expense Tracker](https://raw.githubusercontent.com/placeholder/demo.png)
 
-| ข้อกำหนด | อยู่ที่ไหน |
-|---|---|
-| 1. CRUD | `server/src/expenses.js` (POST / GET / PUT / DELETE) |
-| 2. Data Validation | Server: `server/src/validate.js` · Client: `client/src/ExpenseForm.jsx`, `AuthPage.jsx` |
-| 3. Authentication & Authorization | `server/src/auth.js` (JWT + bcrypt) · ทุก query ผูกกับ `user_id` |
-| 4. Search + Filter | `GET /api/v1/expenses?search=&category=&period=` |
-| 5. API Services (RESTful) | ดูตาราง API ด้านล่าง |
+---
 
-## วิธีรัน
+## 🌟 จุดเด่นและฟีเจอร์หลัก (Features)
 
-ต้องมี Node.js 18 ขึ้นไป เปิด 2 เทอร์มินัล
+* **🎨 ย้อนยุคด้วย Windows XP Luna Design System:**
+    * หน้าจอบูตระบบ (Boot Screen) พร้อมหลอดโหลดสีเขียวแนว Windows XP
+    * ปุ่มกด, ตาราง, และสีสันการ์ดอ้างอิงสไตล์วินโดวส์ยุค 2000s
+    * ตารางสลับสีแถว (Zebra Striping) อ่านง่าย พร้อม Badge หมวดหมู่สีน้ำเงิน
+* **🔐 ระบบสมาชิกและการยืนยันตัวตน (Authentication):**
+    * สมัครสมาชิก และเข้าสู่ระบบปลอดภัยด้วยการเข้ารหัส JWT (JSON Web Token)
+    * ป้องกันข้อมูลรายจ่ายแยกตามบัญชีผู้ใช้แต่ละคนอย่างเป็นอิสระ
+* **📊 จัดการรายการรายจ่ายเต็มรูปแบบ (CRUD Operations):**
+    * **เพิ่มรายการ:** บันทึกยอดเงิน หมวดหมู่ หมายเหตุ และวันที่
+    * **ดึงและแสดงผล:** เรียกร้องข้อมูลเรียงลำดับจากรายการล่าสุดขึ้นก่อน
+    * **ค้นหาและกรองข้อมูล:** ค้นหาตามคำในหมายเหตุ, กรองตามหมวดหมู่ หรือช่วงเวลา (วันนี้ / สัปดาห์นี้ / เดือนนี้) พร้อมปุ่มล้างตัวกรอง
+    * **แก้ไขและลบ:** แก้ไขข้อมูลย้อนหลัง และมีระบบแจ้งเตือนยืนยัน (Confirm Alert) ก่อนลบ
+* **📈 สรุปผลและสถิติการเงิน (Analytics):**
+    * สรุปยอดรวมทั้งหมด และจำนวนรายการรวม
+    * สรุปยอดแยกตามหมวดหมู่ เรียงลำดับจากหมวดที่ใช้จ่ายมากที่สุดไปน้อยที่สุด พร้อมคำนวณสัดส่วนเปอร์เซ็นต์ (%)
 
+---
+
+## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
+
+### Frontend
+* **Core:** React 18, JavaScript (ES6+)
+* **Build Tool:** Vite
+* **Styling:** Custom Pure CSS3 (Windows XP Aesthetic, Grid & Flexbox)
+* **Deployment:** Vercel
+
+### Backend
+* **Runtime Environment:** Node.js
+* **Framework:** Express.js
+* **Security & Auth:** JSON Web Token (JWT), Cors
+* **Validation:** Express-Validator
+* **Deployment:** Render
+
+---
+
+## 📁 โครงสร้างโปรเจกต์ (Project Structure)
+
+```text
+daily-expense-tracker/
+├── client/                   # Frontend React (Vite)
+│   ├── src/
+│   │   ├── api.js           # API Client & Session Management
+│   │   ├── App.jsx          # Main App Component & Boot Loader
+│   │   ├── AuthPage.jsx     # Login & Register Screen
+│   │   ├── ExpenseForm.jsx  # Create & Edit Expense Form
+│   │   ├── ExpensePage.jsx # Main Dashboard & Analytics
+│   │   ├── main.jsx        # Entry Point
+│   │   └── styles.css       # Windows XP CSS Styling
+│   └── package.json
+│
+├── server/                   # Backend Node.js (Express)
+│   ├── index.js             # Express Server & API Routes
+│   └── package.json
+│
+└── README.md                 # Project Documentation
+```
+
+---
+
+## 🔌 ภาพรวมระบบ API (API Endpoints Overview)
+
+### Auth Endpoints
+| Method | Endpoint | Description | Public / Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/v1/auth/register` | สมัครสมาชิกผู้ใช้ใหม่ | Public |
+| `POST` | `/v1/auth/login` | เข้าสู่ระบบ และรับ JWT Token | Public |
+
+### Expenses Endpoints (Requires Bearer Token)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/v1/expenses` | ดึงรายการรายจ่ายทั้งหมด (รองรับ `search`, `category`, `period`) |
+| `POST` | `/v1/expenses` | สร้างรายการรายจ่ายใหม่ |
+| `PUT` | `/v1/expenses/:id` | แก้ไขรายการรายจ่ายตาม ID |
+| `DELETE` | `/v1/expenses/:id` | ลบรายการรายจ่ายตาม ID |
+
+---
+
+## 💻 การติดตั้งและเริ่มต้นใช้งาน (Local Setup)
+
+### ข้อกำหนดเบื้องต้น (Prerequisites)
+* Node.js (v18.x ขึ้นไป)
+* npm หรือ yarn
+
+### 1. ดาวน์โหลดโปรเจกต์ (Clone Repository)
 ```bash
-# เทอร์มินัล 1 — Backend (พอร์ต 4000)
+git clone https://github.com/your-username/daily-expense-tracker.git
+cd daily-expense-tracker
+```
+
+### 2. ตั้งค่าและรัน Backend Server
+```bash
 cd server
 npm install
 npm start
+```
+> Backend จะเริ่มทำงานที่ `http://localhost:5000`
 
-# เทอร์มินัล 2 — Frontend (พอร์ต 5173)
+### 3. ตั้งค่าและรัน Frontend Client
+เปิด Terminal อีกหน้าต่างหนึ่ง:
+```bash
 cd client
 npm install
 npm run dev
 ```
+> Frontend จะเริ่มทำงานที่ `http://localhost:5173`
 
-เปิดเบราว์เซอร์ที่ http://localhost:5173 แล้วสมัครสมาชิกได้เลย
+---
 
-ทดสอบ API อัตโนมัติ (28 กรณี): `cd server && bash test.sh`
+## 📄 ใบอนุญาต (License)
 
-ตั้งค่าเพิ่มเติม (ไม่บังคับ): `PORT`, `JWT_SECRET`, `DB_FILE` — **ก่อนใช้งานจริงควรตั้ง `JWT_SECRET` เอง**
-
-## โครงสร้างฐานข้อมูล (2 ตาราง)
-
-- `users` — id, username (unique), password_hash, created_at
-- `expenses` — id, user_id (FK → users), amount (> 0), category, date, note, created_at
-
-## API
-
-ทุก endpoint ของ `/expenses` ต้องส่ง header `Authorization: Bearer <token>`
-
-| Method | Path | หน้าที่ |
-|---|---|---|
-| POST | `/api/v1/auth/register` | สมัครสมาชิก → ได้ token |
-| POST | `/api/v1/auth/login` | เข้าสู่ระบบ → ได้ token |
-| GET | `/api/v1/expenses` | ดึงรายการ + ยอดรวม + สรุปตามหมวด |
-| POST | `/api/v1/expenses` | เพิ่มรายการ |
-| PUT | `/api/v1/expenses/:id` | แก้ไขรายการ |
-| DELETE | `/api/v1/expenses/:id` | ลบรายการ |
-| GET | `/api/v1/categories` | รายการหมวดหมู่ที่ใช้ได้ |
-
-Query params ของ `GET /expenses`:
-
-- `search` — ค้นหาข้อความใน note (เช่น `?search=กาแฟ`)
-- `category` — `food | transport | entertainment | shopping | bills | other`
-- `period` — `today | week | month` (สัปดาห์เริ่มวันจันทร์)
-- `from`, `to` — ช่วงวันที่เอง `YYYY-MM-DD` (ใช้เมื่อไม่ระบุ `period`)
-
-รวมกันได้ เช่น `?category=food&search=coffee&period=month`
-
-## กฎ Validation
-
-- `amount` — ตัวเลข และมากกว่า 0
-- `category` — ต้องเป็นหนึ่งในหมวดที่กำหนด ห้ามว่าง
-- `date` — รูปแบบ `YYYY-MM-DD` เป็นวันที่จริง และห้ามอยู่ในอนาคต
-- `note` — ไม่บังคับ ยาวไม่เกิน 250 ตัวอักษร
-
-## จุดที่ใช้พรีเซนต์ได้
-
-1. **Data isolation** — `UPDATE/DELETE ... WHERE id = ? AND user_id = ?` ผู้ใช้คนอื่นจะได้ 404 (ไม่เปิดเผยว่ามีรายการนั้นอยู่)
-2. **Validation 2 ชั้น** — client ตรวจเพื่อ UX, server ตรวจซ้ำเพื่อความปลอดภัย
-3. **ปลอดภัยพื้นฐาน** — รหัสผ่านเก็บเป็น bcrypt hash, SQL ใช้ prepared statement ทั้งหมด, ค้นหาแบบ escape ตัวอักษร `%` `_`
+โปรเจกต์นี้จัดทำขึ้นเพื่อการศึกษาและการใช้งานส่วนบุคคลภายใต้สิทธิ์ [MIT License](LICENSE)
