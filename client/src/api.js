@@ -1,5 +1,6 @@
 // api.js — ฟังก์ชันเรียก REST API ทั้งหมดรวมไว้ที่เดียว
-const BASE = '/api/v1';
+const API_HOST = import.meta.env.VITE_API_URL || '';
+const BASE = `${API_HOST}/api/v1`;
 
 export const CATEGORIES = {
   food: 'อาหาร',
