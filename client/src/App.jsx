@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import AuthPage from './AuthPage.jsx';
 import ExpensePage from './ExpensePage.jsx';
 import { clearSession, getUser } from './api.js';
@@ -9,17 +9,20 @@ export default function App() {
 
   useEffect(() => {
     // ดีเลย์เปิดหน้าเว็บ 800ms เพื่อแสดงหน้าจอบูตสไตล์ Windows XP
+    // แสดงหน้าบูตเฉพาะครั้งแรกของแต่ละ session (รีเฟรชไม่ต้องรออีก)
+    const booted = sessionStorage.getItem('booted');
     const timer = setTimeout(() => {
+      sessionStorage.setItem('booted', '1');
       setUser(getUser());
       setInitializing(false);
-    }, 800);
+    }, booted ? 0 : 800);
     return () => clearTimeout(timer);
   }, []);
 
-  function handleLogout() {
+  const handleLogout = useCallback(() => {
     clearSession();
     setUser(null);
-  }
+  }, []);
 
   if (initializing) {
     return (

@@ -1,4 +1,7 @@
 // index.js — จุดเริ่มต้นของเซิร์ฟเวอร์
+// ใช้เวลาไทยเป็นค่าเริ่มต้น ไม่งั้นเซิร์ฟเวอร์ (UTC) จะมองว่า "วันนี้" ของตี 0-7 โมงยังเป็นเมื่อวาน
+process.env.TZ = process.env.TZ || 'Asia/Bangkok';
+
 const express = require('express');
 const cors = require('cors');
 const { router: authRouter, requireAuth } = require('./auth');

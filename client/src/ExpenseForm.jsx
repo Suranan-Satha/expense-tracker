@@ -67,6 +67,9 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
                   id="amount"
                   type="number"
                   step="0.01"
+                  min="0.01"
+                  inputMode="decimal"
+                  placeholder="0.00"
                   value={form.amount}
                   onChange={(e) => setForm({ ...form, amount: e.target.value })}
               />
@@ -97,7 +100,7 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
 
           <div className="form-group">
             <label htmlFor="note">
-              หมายเหตุ <span className="muted">({form.note.length}/{NOTE_MAX})</span>
+              หมายเหตุ <span className={`muted char-count${form.note.length > NOTE_MAX - 20 ? ' near-limit' : ''}`}>({form.note.length}/{NOTE_MAX})</span>
             </label>
             <input
                 id="note"
@@ -111,7 +114,7 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
           {message && <div className="alert" style={{ margin: '10px 0 0 0' }}>{message}</div>}
 
           <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
-            <button type="submit" className="btn" disabled={saving}>
+            <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? 'กำลังบันทึก...' : editing ? 'บันทึกการแก้ไข' : 'เพิ่มรายการ'}
             </button>
             {editing && <button type="button" className="btn" onClick={onCancel}>ยกเลิก</button>}

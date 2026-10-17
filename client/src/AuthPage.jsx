@@ -6,6 +6,7 @@ export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPw, setShowPw] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -56,6 +57,11 @@ export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
               {isRegister ? 'สร้างบัญชีผู้ใช้ใหม่' : 'เข้าสู่ระบบเพื่อจัดการรายจ่ายของคุณ'}
             </p>
 
+            {isRegister && (
+                <p className="muted" style={{ fontSize: '12px', marginBottom: '10px' }}>
+                  ชื่อผู้ใช้ใช้ a-z, 0-9 หรือ _ (3-30 ตัว) · รหัสผ่านอย่างน้อย 6 ตัว
+                </p>
+            )}
             {error && <div className="alert" style={{ margin: '0 0 14px 0' }}>{error}</div>}
 
             <form onSubmit={handleSubmit} noValidate>
@@ -67,21 +73,28 @@ export default function AuthPage({ onLoginSuccess, onLogin, setUser }) {
                     value={form.username}
                     onChange={(e) => setForm({ ...form, username: e.target.value })}
                     autoFocus
+                    autoComplete="username"
                 />
               </div>
 
               <div className="form-group">
                 <label htmlFor="password">รหัสผ่าน</label>
-                <input
-                    id="password"
-                    type="password"
-                    value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
-                />
+                <div className="pw-wrap">
+                  <input
+                      id="password"
+                      type={showPw ? 'text' : 'password'}
+                      autoComplete={isRegister ? 'new-password' : 'current-password'}
+                      value={form.password}
+                      onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  />
+                  <button type="button" className="pw-toggle" onClick={() => setShowPw(!showPw)}>
+                    {showPw ? 'ซ่อน' : 'แสดง'}
+                  </button>
+                </div>
               </div>
 
               <div className="login-actions">
-                <button type="submit" className="btn btn-block" disabled={loading}>
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
                   {loading ? 'กำลังดำเนินการ...' : isRegister ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ'}
                 </button>
                 <button
