@@ -11,7 +11,7 @@ function today() {
 
 const emptyForm = () => ({ amount: '', category: '', date: today(), note: '' });
 
-export default function ExpenseForm({ editing, onSubmit, onCancel }) {
+export default function ExpenseForm({ editing, onSubmit, onCancel, renderTitle, hidden }) {
   const [form, setForm] = useState(emptyForm());
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
@@ -55,10 +55,8 @@ export default function ExpenseForm({ editing, onSubmit, onCancel }) {
   }
 
   return (
-      <form className="card" onSubmit={submit} noValidate>
-        <div className="card-title">
-          <h2>{editing ? 'แก้ไขรายการ' : 'เพิ่มรายจ่าย'}</h2>
-        </div>
+      <form className={`card win${hidden ? ' is-min' : ''}`} onSubmit={submit} noValidate>
+        {renderTitle(editing ? 'แก้ไขรายการ' : 'เพิ่มรายจ่าย')}
         <div className="card-body">
           <div className="form-grid">
             <div className="form-group">

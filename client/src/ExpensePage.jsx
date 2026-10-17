@@ -23,6 +23,18 @@ export default function ExpensePage({ user, onLogout }) {
   const [toast, setToast] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // หน้าต่างแบบเดสก์ท็อป: กดปุ่มที่หัวหน้าต่างเพื่อย่อ/ขยายเนื้อหา
+  const [hidden, setHidden] = useState({});
+  const toggleWin = (k) => setHidden((h) => ({ ...h, [k]: !h[k] }));
+  const titleBar = (key, text) => (
+      <div className="card-title">
+        <h2>{text}</h2>
+        <div className="win-btns">
+          <button type="button" className="win-btn" aria-label={hidden[key] ? 'ขยายหน้าต่าง' : 'ย่อหน้าต่าง'} onClick={() => toggleWin(key)}>{hidden[key] ? '+' : '−'}</button>
+        </div>
+      </div>
+  );
+
   const toastTimer = useRef(null);
   const showToast = (msg) => {
     setToast(msg);
@@ -109,13 +121,11 @@ export default function ExpensePage({ user, onLogout }) {
 
           <div className="layout">
             <div className="side-col">
-              <ExpenseForm editing={editing} onSubmit={handleSubmit} onCancel={() => setEditing(null)} />
+              <ExpenseForm editing={editing} onSubmit={handleSubmit} onCancel={() => setEditing(null)} renderTitle={(t) => titleBar('form', t)} hidden={hidden.form} />
 
               {/* ข้อ 3: การ์ดค้นหาและกรอง + ปุ่มล้างตัวกรอง */}
-              <section className="card">
-                <div className="card-title">
-                  <h2>ค้นหาและกรอง</h2>
-                </div>
+              <section className={`card win${hidden.filter ? ' is-min' : ''}`}>
+                {titleBar('filter', 'ค้นหาและกรอง')}
                 <div className="card-body">
                   <div className="form-grid">
                     <div className="form-group">
@@ -154,10 +164,8 @@ export default function ExpensePage({ user, onLogout }) {
             </div>
             <div className="main-col">
               {/* ข้อ 1 & 2: แยกการ์ดสรุปเป็นสองกลุ่ม + สัดส่วน % + ลบคำว่า "รวมหมวด" */}
-              <section className="card">
-                <div className="card-title">
-                  <h2>สรุปยอดเงิน</h2>
-                </div>
+              <section className={`card win${hidden.summary ? ' is-min' : ''}`}>
+                {titleBar('summary', 'สรุปยอดเงิน')}
                 <div className="card-body">
                   <div className="summary-main">
                     <div className="summary-card main-stat">
@@ -194,10 +202,8 @@ export default function ExpensePage({ user, onLogout }) {
               {error && <div className="alert">{error}</div>}
 
               {/* ข้อ 4, 5, 6, 7 & 8: ตารางรายการเรียงตามวันที่ล่าสุด, ฟอร์แมตวันที่ไทย, แสดง "-" เมื่อหมายเหตุว่าง */}
-              <section className="card">
-                <div className="card-title">
-                  <h2>รายการรายจ่าย</h2>
-                </div>
+              <section className={`card win${hidden.list ? ' is-min' : ''}`}>
+                {titleBar('list', 'รายการรายจ่าย')}
                 <div className="table-container" style={{ paddingTop: '16px' }}>
                   {loading ? (
                       <div className="loading-box">
@@ -228,7 +234,7 @@ export default function ExpensePage({ user, onLogout }) {
                               <td className="num">{baht(it.amount)}</td>
                               <td className="actions">
                                 <div className="action-btns">
-                                  <button className="btn btn-sm" onClick={() => { setEditing(it); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                                  <button className="btn btn-sm" onClick={() => { setEditing(it); setHidden((h) => ({ ...h, form: false })); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                                     แก้ไข
                                   </button>
                                   <button className="btn btn-sm btn-delete" onClick={() => handleDelete(it)}>

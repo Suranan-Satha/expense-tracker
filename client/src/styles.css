@@ -411,3 +411,60 @@ th, td { padding: 12px 14px; }
   .layout { grid-template-columns: 1fr; }
   .side-col { position: static; }
 }
+
+/* ---- v5: ธีมเดสก์ท็อปเรโทร (Win95/98 โทนม่วงพาสเทล) ---- */
+:root { --navy: #1a1aa6; --win: #e6d9ee; --win-dark: #b9a8cc; --win-light: #fbf6ff; --ink: #1c1030; --accent: #d65a9e; }
+body {
+  font-family: "VT323", "Sarabun", "Noto Sans Thai", monospace; font-size: 19px; color: var(--ink);
+  background:
+          radial-gradient(ellipse 160px 50px at 15% 18%, #fff 60%, transparent 62%),
+          radial-gradient(ellipse 220px 60px at 78% 30%, #fff 60%, transparent 62%),
+          radial-gradient(ellipse 180px 50px at 40% 72%, #fff 60%, transparent 62%),
+          linear-gradient(#6bb7ff, #a9d8ff 60%, #d6ecff);
+  background-attachment: fixed;
+}
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100; background: repeating-linear-gradient(to bottom, rgba(0,0,0,.06) 0 1px, transparent 1px 3px); }
+.auth-card, .boot-card, .card { background: var(--win); border: 2px solid var(--navy); border-radius: 0; box-shadow: inset 1px 1px 0 var(--win-light), 4px 4px 0 rgba(0,0,40,.35); }
+.auth-header, .card-title, .topbar { background: var(--navy); border-bottom: 2px solid var(--navy); text-shadow: none; font-size: 22px; font-weight: normal; letter-spacing: .5px; padding: 6px 10px; }
+.topbar h1, .auth-header h1, .card-title h2 { font-size: 22px; font-weight: normal; }
+.is-min > :not(.card-title) { display: none; }
+.win-btns { display: flex; gap: 4px; }
+.win-btn { width: 26px; height: 24px; padding: 0; line-height: 1; background: var(--win); color: var(--navy); font: inherit; font-size: 20px; cursor: pointer; border: 2px solid var(--navy); border-top-color: #fff; border-left-color: #fff; }
+.win-btn:active { border-color: var(--navy); border-bottom-color: #fff; border-right-color: #fff; }
+label { font-size: 18px; font-weight: normal; letter-spacing: .3px; }
+input, select, textarea { font-family: inherit; font-size: 19px; color: var(--ink); background: #fff; border: 2px solid var(--navy); border-right-color: #fff; border-bottom-color: #fff; border-radius: 0; }
+input:focus, select:focus, textarea:focus { outline: 2px dashed var(--accent); outline-offset: 1px; }
+.btn { background: var(--win); color: var(--ink); font-family: inherit; font-size: 19px; font-weight: normal; border: 2px solid var(--navy); border-top-color: #fff; border-left-color: #fff; border-radius: 0; box-shadow: none; }
+.btn:hover { background: var(--win-light); border-color: var(--navy); border-top-color: #fff; border-left-color: #fff; }
+.btn:active { background: var(--win-dark); border-color: var(--navy); border-bottom-color: #fff; border-right-color: #fff; box-shadow: none; }
+.btn-primary { background: var(--navy); color: #fff; text-shadow: none; border-top-color: #7a7aff; border-left-color: #7a7aff; }
+.btn-primary:hover { background: #2a2ac4; border-color: var(--navy); border-top-color: #7a7aff; border-left-color: #7a7aff; }
+.btn-primary:active { background: #10107a; border-color: var(--navy); border-bottom-color: #7a7aff; border-right-color: #7a7aff; }
+.btn-delete { color: #b00020; }
+.btn-delete:hover { background: #ffd6e8; }
+.login-toggle-btn, .pw-toggle { font-family: inherit; }
+.summary-card { background: #fff; border: 2px solid var(--navy); border-right-color: #fff; border-bottom-color: #fff; }
+.summary-card .label { font-size: 17px; color: #4a3d63; }
+.summary-card .value { font-size: 26px; font-weight: normal; color: var(--navy); }
+.summary-card .value.primary-value { font-size: 38px; color: var(--accent); }
+.percent-tag { background: var(--win); border-radius: 0; font-size: 15px; }
+.section-subheading { font-size: 20px; font-weight: normal; color: var(--navy); border-bottom: 2px dashed var(--win-dark); }
+.cat-bar { height: 14px; background: #fff; border: 2px solid var(--navy); border-right-color: #fff; border-bottom-color: #fff; }
+.cat-bar-fill { background: repeating-linear-gradient(90deg, var(--accent) 0 8px, #fff 8px 10px); }
+.xp-progress-bar { border: 2px solid var(--navy); border-right-color: #fff; border-bottom-color: #fff; }
+.xp-progress-fill { background: repeating-linear-gradient(90deg, var(--navy) 0 10px, transparent 10px 12px); }
+table { font-size: 18px; border: 2px solid var(--navy); border-right-color: #fff; border-bottom-color: #fff; }
+th { background: var(--win); color: var(--navy); font-size: 19px; font-weight: normal; border-bottom: 2px solid var(--navy); border-right: 2px solid var(--win-dark); }
+td { border-bottom: 1px dashed var(--win-dark); border-right: 1px solid #eee3f5; }
+tr:nth-child(even) { background: #f5eefa; }
+.num { font-weight: normal; }
+.badge { background: var(--navy); border-radius: 0; font-size: 16px; }
+.toast-notification { background: #fff7b8; color: var(--ink); font-weight: normal; border: 2px solid var(--navy); border-radius: 0; box-shadow: 4px 4px 0 rgba(0,0,40,.35); }
+.alert { border: 2px solid #b00020; border-radius: 0; background: #ffe3ea; color: #8a0018; }
+.field-error { font-size: 16px; }
+
+
+/* ---- v6: ข้อความในแถบหัวใหญ่ขึ้น (VT323 เล็กกว่าฟอนต์ไทยที่ขนาดเท่ากัน) ---- */
+.topbar h1 { font-size: 28px; }
+.user-info { font-size: 22px; gap: 14px; }
+.user-info strong { font-size: 28px; font-weight: normal; }
